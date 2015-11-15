@@ -24,7 +24,7 @@ class User(db.Model):
 
 @app.route('/')
 def index():
-    return redirect('http://samdobson.github.io/fwdform')
+    return redirect('http://memeplatter.github.io/')
 
 @app.route('/register', methods=['POST'])
 def register():
@@ -44,8 +44,9 @@ def forward(uuid):
     message = {
                'to': [{'email': user.email}],
                'from_email': request.form['email'],
-               'subject': 'Message from {}'.format(request.form['name']),
+               'subject': request.form['subject'],
                'text': request.form['message'],
+			   'text': 'From: {}\nSubject: {}\n\nMessage Body:\n{}'.format(request.form['name'],request.form['subject'],request.form['message']),
               }
     result = mandrill_client.messages.send(message=message)
     if result[0]['status'] != 'sent':
