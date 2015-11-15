@@ -46,7 +46,7 @@ def forward(uuid):
                'from_email': request.form['email'],
                'subject': request.form['subject'],
                'text': request.form['message'],
-			   'text': 'From: {}\nSubject: {}\n\nMessage Body:\n{}'.format(request.form['name'],request.form['subject'],request.form['message']),
+			   'text': 'From: {}  \nSubject: {}  \n\nMessage Body:  \n{}'.format(request.form['name'],request.form['subject'],request.form['message']),
               }
     result = mandrill_client.messages.send(message=message)
     if result[0]['status'] != 'sent':
