@@ -41,6 +41,8 @@ def forward(uuid):
     user = User.query.filter_by(uuid=uuid).first()
     if not user:
         return ('User not found', 406)
+    if request.form['meme'] != "":
+    	return ('Meme not found', 407)
     message = {
                'to': [{'email': user.email}],
                'from_email': request.form['email'],
