@@ -38,3 +38,4 @@ nosetests.xml
 /.vs
 /env
 *.pyproj
+/fwdform.sln
