@@ -1,7 +1,9 @@
 import os
 from uuid import uuid4
 
-from mandrill import Mandrill
+#from mandrill import Mandrill
+import sendgrid
+from sendgrid.helpers.mail import *
 from flask.ext.cors import CORS
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask import Flask, request, redirect, abort
@@ -9,7 +11,7 @@ from flask import Flask, request, redirect, abort
 app = Flask(__name__)
 cors = CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
-mandrill_client = Mandrill(os.environ['MANDRILL_API_KEY'])
+sendgrid_client = sendgrid.SendGridAPIClient(apikey=os.environ['SENDGRID_API_KEY'])
 db = SQLAlchemy(app)
 
 
@@ -47,19 +49,22 @@ def forward(uuid):
         return ('User not found', 406)
     if len(request.form['email']) > 0:
         return ('Meme not found', 407)
-    message = {
-        'to': [{'email': user.email}],
-        'from_email': request.form['memail'],
-        'subject': request.form['subject'],
-        'text': request.form['message'],
-        'text': 'From: {}  \nSubject: {}  \n\nMessage Body:  \n{}'.format(request.form['name'], request.form['subject'], request.form['message']),
-        }
-    result = mandrill_client.messages.send(message=message)
-    if result[0]['status'] != 'sent':
-        abort(500)
+    to_email = [{'email': user.email}]
+    from_email = request.form['memail']
+    subject = request.form['subject']
+    text = request.form['message']
+    content = 'From: {}  \nSubject: {}  \n\nMessage Body:  \n{}'.format(request.form['name'], request.form['subject'], request.form['message'])
+    #result = sendgrid_client.messages.send(message=message)
+    mail = Mail(from_email, subject, to_email, content)
+    response = sendgrid_client.client.mail.send.post(request_body=mail.get())
+    print(response.status_code)
+    print(response.body)
+    print(response.headers)
+    #if result[0]['status'] != 'sent':
+    #    abort(500)
     if 'next' in request.form:
         return redirect(request.form['next'])
-    return 'Your message was sent successfully'
+    return response.status_code + '\n' + response.body + '\n' + response.headers
 
 
 @app.errorhandler(400)
