@@ -60,11 +60,11 @@ def forward(uuid):
     print(response.status_code)
     print(response.body)
     print(response.headers)
-    #if result[0]['status'] != 'sent':
-    #    abort(500)
+    if response.status_code != 202:
+        return str(response.status_code) + '\n' + str(response.body) + '\n' + str(response.headers)
     if 'next' in request.form:
         return redirect(request.form['next'])
-    return str(response.status_code) + '\n' + str(response.body) + '\n' + str(response.headers)
+    return 'Email sent'
 
 
 @app.errorhandler(400)
