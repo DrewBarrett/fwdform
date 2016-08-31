@@ -49,11 +49,11 @@ def forward(uuid):
         return ('User not found', 406)
     if len(request.form['email']) > 0:
         return ('Meme not found', 407)
-    to_email = user.email
-    from_email = request.form['memail']
+    to_email = Email(user.email)
+    from_email = Email(request.form['memail'])
     subject = request.form['subject']
     text = request.form['message']
-    content = 'From: {}  \nSubject: {}  \n\nMessage Body:  \n{}'.format(request.form['name'], request.form['subject'], request.form['message'])
+    content = Content("text/plain", 'From: {}  \nSubject: {}  \n\nMessage Body:  \n{}'.format(request.form['name'], request.form['subject'], request.form['message']))
     #result = sendgrid_client.messages.send(message=message)
     mail = Mail(from_email, subject, to_email, content)
     response = sendgrid_client.client.mail.send.post(request_body=mail.get())
