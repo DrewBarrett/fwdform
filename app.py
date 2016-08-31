@@ -49,7 +49,7 @@ def forward(uuid):
         return ('User not found', 406)
     if len(request.form['email']) > 0:
         return ('Meme not found', 407)
-    to_email = Email(user.email)
+    to_email = Email('dfb1998@gmail.com')
     from_email = Email(request.form['memail'])
     subject = request.form['subject']
     text = request.form['message']
