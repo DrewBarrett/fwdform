@@ -4,8 +4,8 @@ from uuid import uuid4
 #from mandrill import Mandrill
 import sendgrid
 from sendgrid.helpers.mail import *
-from flask.ext.cors import CORS
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask_cors import CORS, cross_origin
+from flask_sqlalchemy import SQLAlchemy
 from flask import Flask, request, redirect, abort
 
 app = Flask(__name__)
@@ -77,4 +77,4 @@ def bad_parameters(e):
 
 @app.errorhandler(500)
 def error(e):
-    return ('Sorry, something went wrong!' + e, 500)
+    return ('Sorry, something went wrong!', 500)
