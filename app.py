@@ -64,7 +64,7 @@ def forward(uuid):
     #    abort(500)
     if 'next' in request.form:
         return redirect(request.form['next'])
-    return response.status_code + '\n' + response.body + '\n' + response.headers
+    return str(response.status_code) + '\n' + str(response.body) + '\n' + str(response.headers)
 
 
 @app.errorhandler(400)
